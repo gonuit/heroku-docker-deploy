@@ -51,5 +51,7 @@ jobs:
 ```
 
 ## Logs
-### All build logs will be grouped and available to you.
+### All build logs will be grouped:
+![An example of logs groups.](readme/groups.png)
+### And available to you.
 ![Logs example.](readme/logs.png)
