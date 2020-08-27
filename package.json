@@ -1,0 +1,34 @@
+{
+  "name": "heroku-docker-deploy",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Kamil Klyta",
+  "description": "Build, Push and Release a Docker container to Heroku.",
+  "main": "src/main.ts",
+  "homepage": "https://github.com/gonuit/heroku-docker-deploy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gonuit/heroku-docker-deploy.git"
+  },
+  "scripts": {
+    "echo": "echo COMMAND",
+    "build": "npx @zeit/ncc build src/main.ts",
+    "lint": "eslint \"**/*.ts\"",
+    "fix": "eslint \"**/*.ts\" --fix"
+  },
+  "dependencies": {
+    "@actions/core": "^1.2.3",
+    "@actions/github": "^2.1.1",
+    "assert": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/eslint": "^6.1.1",
+    "@typescript-eslint/eslint-plugin": "^3.1.0",
+    "@typescript-eslint/parser": "^3.1.0",
+    "eslint": "^6.4.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "prettier": "^2.0.5",
+    "typescript": "^4.0.2"
+  }
+}

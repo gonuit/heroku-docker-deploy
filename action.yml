@@ -1,0 +1,22 @@
+name: "Build, Push and Release a Docker container to Heroku."
+author: "Kamil Klyta"
+description: "Build, Push and Release a Docker container to Heroku."
+inputs:
+  heroku_app_name:
+    description: "Name of the heroku application to which the build is to be sent."
+    required: true
+  email:
+    description: "The email address associated with your Heroku account."
+    required: true
+  heroku_api_key:
+    description: "Heroku API key associated with provided user's email."
+    required: true
+  dockerfile_directory:
+    description: "Dokerfile directory."
+    required: true
+branding:
+  icon: server
+  color: purple
+runs:
+  using: "node12"
+  main: "dist/index.js"

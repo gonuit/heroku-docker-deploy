@@ -1,0 +1,55 @@
+# Heroku Docker Deploy - GitHub Action
+
+Build, Push and Release a Docker container to Heroku 🚀.
+  
+## Getting started
+
+### Your GitHub action workflow file might look like this:
+```yml
+# Your workflow name.
+name: Deploy to heroku.
+
+# Run workflow on every push to master branch.
+on:
+  push:
+    branches: [master]
+
+# Your workflows jobs.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Check-out your repository.
+      - name: Checkout
+        uses: actions/checkout@v2
+
+
+### ⬇ IMPORTANT PART ⬇ ###
+
+      - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
+        uses: gonuit/heroku-docker-deploy@v1.0.0 # GitHub action name (leave it as it is).
+        with:
+          # Below you must provide variables for your Heroku app.
+
+          # The email address associated with your Heroku account.
+          email: ${{ secrets.HEROKU_EMAIL }}
+          # If you don't want to use repository secrets (which is recommended) you can do:
+          # email: my.email@example.com
+          
+          # Heroku API key associated with provided user's email.
+          # Api Key is available under your Heroku account settings.
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          
+          # Name of the heroku application to which the build is to be sent.
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          
+          # Dokerfile directory.
+          # For example, if you have a Dockerfile in the root of your project, leave it as follows:
+          dockerfile_directory: ./
+          
+### ⬆ IMPORTANT PART ⬆ ###
+```
+
+## Logs
+### All build logs will be grouped and available to you.
+![Logs example.](readme/logs.png)
