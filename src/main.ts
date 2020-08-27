@@ -14,8 +14,8 @@ import assert from 'assert';
 
     assert(email, 'Missing required field: `email`.');
     assert(herokuApiKey, 'Missing required field: `heroku_api_key`.');
-    assert(email, 'Missing required field: `heroku_app_name`.');
-    assert(email, 'Missing required field: `dockerfile_directory`.');
+    assert(herokuAppName, 'Missing required field: `heroku_app_name`.');
+    assert(dockerFilePath, 'Missing required field: `dockerfile_directory`.');
 
     const logged = await loginToHeroku({ email, herokuApiKey });
     if (!logged) return;
