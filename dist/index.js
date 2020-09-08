@@ -40,7 +40,7 @@ module.exports =
 /******/ 	// the startup function
 /******/ 	function startup() {
 /******/ 		// Load entry module and return exports
-/******/ 		return __webpack_require__(542);
+/******/ 		return __webpack_require__(95);
 /******/ 	};
 /******/
 /******/ 	// run startup
@@ -49,6 +49,61 @@ module.exports =
 /************************************************************************/
 /******/ ({
 
+/***/ 10:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.loginToHeroku = void 0;
+const core = __importStar(__webpack_require__(580));
+const utils_1 = __webpack_require__(110);
+exports.loginToHeroku = ({ email, herokuApiKey, }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        core.startGroup('Logging into the Heroku docker registry...');
+        const data = yield utils_1.exec(`echo ${herokuApiKey} | docker login --username=${email} registry.heroku.com --password-stdin`);
+        console.log(data.stdout);
+        core.endGroup();
+        return true;
+    }
+    catch (error) {
+        core.endGroup();
+        core.setFailed(`Logging failed.\nError: ${error.message}`);
+        return false;
+    }
+});
+
+
+/***/ }),
+
 /***/ 87:
 /***/ (function(module) {
 
@@ -56,14 +111,87 @@ module.exports = require("os");
 
 /***/ }),
 
-/***/ 129:
-/***/ (function(module) {
+/***/ 95:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
 
-module.exports = require("child_process");
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core = __importStar(__webpack_require__(580));
+const login_to_heroku_1 = __webpack_require__(10);
+const build_docker_image_1 = __webpack_require__(867);
+const push_docker_container_1 = __webpack_require__(438);
+const release_docker_container_1 = __webpack_require__(772);
+const assert_1 = __importDefault(__webpack_require__(357));
+(() => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const email = core.getInput('email');
+        const herokuApiKey = core.getInput('heroku_api_key');
+        const herokuAppName = core.getInput('heroku_app_name');
+        const dockerFilePath = core.getInput('dockerfile_directory');
+        const dockerfileName = core.getInput('dockerfile_name') || 'Dockerfile';
+        const dockerOptions = core.getInput('docker_options');
+        assert_1.default(email, 'Missing required field: `email`.');
+        assert_1.default(herokuApiKey, 'Missing required field: `heroku_api_key`.');
+        assert_1.default(herokuAppName, 'Missing required field: `heroku_app_name`.');
+        assert_1.default(dockerFilePath, 'Missing required field: `dockerfile_directory`.');
+        const logged = yield login_to_heroku_1.loginToHeroku({ email, herokuApiKey });
+        if (!logged)
+            return;
+        const built = yield build_docker_image_1.buildDockerImage({ dockerfileName, dockerFilePath, dockerOptions, herokuAppName });
+        if (!built)
+            return;
+        const pushed = yield push_docker_container_1.pushDockerContainer({ herokuApiKey, herokuAppName });
+        if (!pushed)
+            return;
+        const released = yield release_docker_container_1.releaseDockerContainer({
+            herokuApiKey,
+            herokuAppName,
+        });
+        if (!released)
+            return;
+        console.log('Successfully deployed! 💪 🚀');
+    }
+    catch (err) {
+        core.setFailed(`Something goes wrong 😧.\nError: ${err.message}`);
+    }
+}))();
+
 
 /***/ }),
 
-/***/ 179:
+/***/ 110:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -116,6 +244,13 @@ exports.runCommand = (command, env = {}) => __awaiter(void 0, void 0, void 0, fu
 
 /***/ }),
 
+/***/ 129:
+/***/ (function(module) {
+
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 357:
 /***/ (function(module) {
 
@@ -123,7 +258,7 @@ module.exports = require("assert");
 
 /***/ }),
 
-/***/ 362:
+/***/ 438:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -157,22 +292,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.releaseDockerContainer = void 0;
-const core = __importStar(__webpack_require__(705));
-const utils_1 = __webpack_require__(179);
-exports.releaseDockerContainer = ({ herokuApiKey, herokuAppName, }) => __awaiter(void 0, void 0, void 0, function* () {
+exports.pushDockerContainer = void 0;
+const core = __importStar(__webpack_require__(580));
+const utils_1 = __webpack_require__(110);
+exports.pushDockerContainer = ({ herokuApiKey, herokuAppName, }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        core.startGroup('Releasing container...');
-        yield utils_1.runCommand(`heroku container:release web --app ${herokuAppName}`, {
+        core.startGroup('Pushing container to heroku registry...');
+        yield utils_1.runCommand(`heroku container:push web --app ${herokuAppName}`, {
             HEROKU_API_KEY: herokuApiKey,
         });
-        console.log('Container released.');
+        console.log('Container pushed.');
         core.endGroup();
         return true;
     }
     catch (err) {
         core.endGroup();
-        core.setFailed(`Releasing docker container failed.\nError: ${err.message}`);
+        core.setFailed(`Pushing docker container failed.\nError ${err.message}`);
         return false;
     }
 });
@@ -180,7 +315,7 @@ exports.releaseDockerContainer = ({ herokuApiKey, herokuAppName, }) => __awaiter
 
 /***/ }),
 
-/***/ 451:
+/***/ 496:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -279,156 +414,7 @@ function escapeProperty(s) {
 
 /***/ }),
 
-/***/ 542:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const core = __importStar(__webpack_require__(705));
-const login_to_heroku_1 = __webpack_require__(800);
-const build_docker_image_1 = __webpack_require__(737);
-const push_docker_container_1 = __webpack_require__(543);
-const release_docker_container_1 = __webpack_require__(362);
-const assert_1 = __importDefault(__webpack_require__(357));
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const email = core.getInput('email');
-        const herokuApiKey = core.getInput('heroku_api_key');
-        const herokuAppName = core.getInput('heroku_app_name');
-        const dockerFilePath = core.getInput('dockerfile_directory');
-        assert_1.default(email, 'Missing required field: `email`.');
-        assert_1.default(herokuApiKey, 'Missing required field: `heroku_api_key`.');
-        assert_1.default(email, 'Missing required field: `heroku_app_name`.');
-        assert_1.default(email, 'Missing required field: `dockerfile_directory`.');
-        const logged = yield login_to_heroku_1.loginToHeroku({ email, herokuApiKey });
-        if (!logged)
-            return;
-        const built = yield build_docker_image_1.buildDockerImage({ dockerFilePath, herokuAppName });
-        if (!built)
-            return;
-        const pushed = yield push_docker_container_1.pushDockerContainer({ herokuApiKey, herokuAppName });
-        if (!pushed)
-            return;
-        const released = yield release_docker_container_1.releaseDockerContainer({
-            herokuApiKey,
-            herokuAppName,
-        });
-        if (!released)
-            return;
-        console.log('Successfully deployed! 💪 🚀');
-    }
-    catch (err) {
-        core.setFailed(`Something goes wrong 😧.\nError: ${err.message}`);
-    }
-}))();
-
-
-/***/ }),
-
-/***/ 543:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pushDockerContainer = void 0;
-const core = __importStar(__webpack_require__(705));
-const utils_1 = __webpack_require__(179);
-exports.pushDockerContainer = ({ herokuApiKey, herokuAppName, }) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        core.startGroup('Pushing container to heroku registry...');
-        yield utils_1.runCommand(`heroku container:push web --app ${herokuAppName}`, {
-            HEROKU_API_KEY: herokuApiKey,
-        });
-        console.log('Container pushed.');
-        core.endGroup();
-        return true;
-    }
-    catch (err) {
-        core.endGroup();
-        core.setFailed(`Pushing docker container failed.\nError ${err.message}`);
-        return false;
-    }
-});
-
-
-/***/ }),
-
-/***/ 622:
-/***/ (function(module) {
-
-module.exports = require("path");
-
-/***/ }),
-
-/***/ 669:
-/***/ (function(module) {
-
-module.exports = require("util");
-
-/***/ }),
-
-/***/ 705:
+/***/ 580:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -450,7 +436,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const command_1 = __webpack_require__(451);
+const command_1 = __webpack_require__(496);
 const os = __importStar(__webpack_require__(87));
 const path = __importStar(__webpack_require__(622));
 /**
@@ -657,7 +643,78 @@ exports.getState = getState;
 
 /***/ }),
 
-/***/ 737:
+/***/ 622:
+/***/ (function(module) {
+
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 669:
+/***/ (function(module) {
+
+module.exports = require("util");
+
+/***/ }),
+
+/***/ 772:
+/***/ (function(__unusedmodule, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.releaseDockerContainer = void 0;
+const core = __importStar(__webpack_require__(580));
+const utils_1 = __webpack_require__(110);
+exports.releaseDockerContainer = ({ herokuApiKey, herokuAppName, }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        core.startGroup('Releasing container...');
+        yield utils_1.runCommand(`heroku container:release web --app ${herokuAppName}`, {
+            HEROKU_API_KEY: herokuApiKey,
+        });
+        console.log('Container released.');
+        core.endGroup();
+        return true;
+    }
+    catch (err) {
+        core.endGroup();
+        core.setFailed(`Releasing docker container failed.\nError: ${err.message}`);
+        return false;
+    }
+});
+
+
+/***/ }),
+
+/***/ 867:
 /***/ (function(__unusedmodule, exports, __webpack_require__) {
 
 "use strict";
@@ -692,13 +749,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildDockerImage = void 0;
-const core = __importStar(__webpack_require__(705));
-const utils_1 = __webpack_require__(179);
-exports.buildDockerImage = ({ dockerFilePath, herokuAppName, }) => __awaiter(void 0, void 0, void 0, function* () {
+const core = __importStar(__webpack_require__(580));
+const utils_1 = __webpack_require__(110);
+exports.buildDockerImage = ({ dockerfileName, dockerFilePath, dockerOptions, herokuAppName, }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         core.startGroup('Building docker container...');
         yield utils_1.cd(dockerFilePath);
-        yield utils_1.runCommand(`docker build . --file Dockerfile --tag registry.heroku.com/${herokuAppName}/web`);
+        yield utils_1.runCommand(`docker build . --file ${dockerfileName} ${dockerOptions} --tag registry.heroku.com/${herokuAppName}/web`);
         console.log('Docker container built.');
         core.endGroup();
         return true;
@@ -706,61 +763,6 @@ exports.buildDockerImage = ({ dockerFilePath, herokuAppName, }) => __awaiter(voi
     catch (err) {
         core.endGroup();
         core.setFailed(`Building container failed.\nError: ${err.message}`);
-        return false;
-    }
-});
-
-
-/***/ }),
-
-/***/ 800:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginToHeroku = void 0;
-const core = __importStar(__webpack_require__(705));
-const utils_1 = __webpack_require__(179);
-exports.loginToHeroku = ({ email, herokuApiKey, }) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        core.startGroup('Logging into the Heroku docker registry...');
-        const data = yield utils_1.exec(`echo ${herokuApiKey} | docker login --username=${email} registry.heroku.com --password-stdin`);
-        console.log(data.stdout);
-        core.endGroup();
-        return true;
-    }
-    catch (error) {
-        core.endGroup();
-        core.setFailed(`Logging failed.\nError: ${error.message}`);
         return false;
     }
 });

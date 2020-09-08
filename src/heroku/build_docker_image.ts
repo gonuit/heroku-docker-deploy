@@ -2,10 +2,14 @@ import * as core from '@actions/core';
 import { cd, runCommand } from '../utils';
 
 export const buildDockerImage = async ({
+  dockerfileName,
   dockerFilePath,
+  dockerOptions,
   herokuAppName,
 }: {
+  dockerfileName: string;
   dockerFilePath: string;
+  dockerOptions: string | undefined;
   herokuAppName: string;
 }): Promise<boolean> => {
   try {
@@ -13,7 +17,7 @@ export const buildDockerImage = async ({
     await cd(dockerFilePath);
 
     await runCommand(
-      `docker build . --file Dockerfile --tag registry.heroku.com/${herokuAppName}/web`,
+      `docker build . --file ${dockerfileName} ${dockerOptions} --tag registry.heroku.com/${herokuAppName}/web`,
     );
     console.log('Docker container built.');
     core.endGroup();
