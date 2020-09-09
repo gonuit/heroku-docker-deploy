@@ -9,7 +9,7 @@ export const buildDockerImage = async ({
 }: {
   dockerfileName: string;
   dockerFilePath: string;
-  dockerOptions?: string;
+  dockerOptions?: string | undefined;
   herokuAppName: string;
 }): Promise<boolean> => {
   try {
