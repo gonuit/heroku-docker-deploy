@@ -42,6 +42,12 @@ jobs:
           
           # Name of the heroku application to which the build is to be sent.
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+
+          # Dokerfile name. Optional, by default will be set to "Dockerfile".
+          dockerfile_name: Dockerfile
+
+          # Additional options of docker build command. (Optional)
+          docker_options: "--no-cache"
           
           # Dokerfile directory.
           # For example, if you have a Dockerfile in the root of your project, leave it as follows:
