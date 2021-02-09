@@ -12,10 +12,10 @@ inputs:
     description: "Heroku API key associated with provided user's email."
     required: true
   dockerfile_directory:
-    description: "Dokerfile directory."
+    description: "Dockerfile directory."
     required: true
   dockerfile_name:
-    description: "Dokerfile name. [default=Dockerfile]"
+    description: "Dockerfile name. [default=Dockerfile]"
     required: false
   docker_options:
     description: "Additional options of docker build command"
