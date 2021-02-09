@@ -19,7 +19,7 @@ export const buildDockerImage = async ({
     const options = dockerOptions ?? '';
 
     await runCommand(
-      `docker build . --file ${dockerfileName} ${options} --tag registry.heroku.com/${herokuAppName}/web`,
+      `docker build --file ${dockerfileName} ${options} --tag registry.heroku.com/${herokuAppName}/web .`,
     );
     console.log('Docker container built.');
     core.endGroup();

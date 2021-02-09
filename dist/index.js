@@ -765,7 +765,7 @@ exports.buildDockerImage = ({ dockerfileName, dockerFilePath, dockerOptions, her
         core.startGroup('Building docker container...');
         yield utils_1.cd(dockerFilePath);
         const options = dockerOptions !== null && dockerOptions !== void 0 ? dockerOptions : '';
-        yield utils_1.runCommand(`docker build . --file ${dockerfileName} ${options} --tag registry.heroku.com/${herokuAppName}/web`);
+        yield utils_1.runCommand(`docker build --file ${dockerfileName} ${options} --tag registry.heroku.com/${herokuAppName}/web .`);
         console.log('Docker container built.');
         core.endGroup();
         return true;
