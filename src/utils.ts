@@ -19,9 +19,14 @@ export const assertDirExists = (dirPath: string): void => {
   assert(directoryExists, `Directory: "${dirPath}" does not exist.`);
 };
 
+interface RunCommandOptions {
+  env?: Record<string, string>;
+  options?: Omit<ChildProcess.SpawnOptions, 'env' | 'stdio'>;
+}
+
 export const runCommand = async (
   command: string,
-  env: Record<string, string> = {},
+  { options, env }: RunCommandOptions = {},
 ): Promise<number> => {
   const parts = command.split(' ').filter((part) => Boolean(part));
   if (parts.length === 0) throw new Error('Wrong command provided');
@@ -33,6 +38,7 @@ export const runCommand = async (
     const commandEnv = Object.assign(processEnv, env);
 
     const command = spawn(parts[0], args, {
+      ...options,
       env: commandEnv,
       stdio: 'inherit',
     });
