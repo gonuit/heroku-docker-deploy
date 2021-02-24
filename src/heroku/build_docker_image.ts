@@ -1,25 +1,25 @@
 import * as core from '@actions/core';
-import { cd, runCommand } from '../utils';
+import { runCommand } from '../utils';
 
 export const buildDockerImage = async ({
   dockerfileName,
-  dockerFilePath,
   dockerOptions,
   herokuAppName,
+  cwd,
 }: {
   dockerfileName: string;
-  dockerFilePath: string;
   dockerOptions?: string | undefined;
   herokuAppName: string;
+  cwd: string;
 }): Promise<boolean> => {
   try {
-    core.startGroup('Building docker container...');
-    await cd(dockerFilePath);
+    core.startGroup(`Building docker container...`);
 
     const options = dockerOptions ?? '';
 
     await runCommand(
       `docker build . --file ${dockerfileName} ${options} --tag registry.heroku.com/${herokuAppName}/web`,
+      { options: { cwd } },
     );
     console.log('Docker container built.');
     core.endGroup();
