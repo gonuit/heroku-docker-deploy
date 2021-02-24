@@ -1,11 +1,22 @@
 import ChildProcess from 'child_process';
 import { promisify } from 'util';
+import p from 'path';
+import fs from 'fs';
 import { spawn } from 'child_process';
+import assert from 'assert';
 
 export const exec = promisify(ChildProcess.exec);
 
-export const cd = async (dockerFilePath: string): Promise<void> => {
-  await exec(`cd ${dockerFilePath}`);
+export const getCwd = (path: string): string => {
+  assert(path, 'Path cannot be null or undefined.');
+
+  const cwd = process.cwd();
+  return p.join(cwd, path);
+};
+
+export const assertDirExists = (dirPath: string): void => {
+  const directoryExists = fs.existsSync(dirPath);
+  assert(directoryExists, `Directory: "${dirPath}" does not exist.`);
 };
 
 export const runCommand = async (
