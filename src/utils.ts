@@ -24,10 +24,7 @@ interface RunCommandOptions {
   options?: Omit<ChildProcess.SpawnOptions, 'env' | 'stdio'>;
 }
 
-export const runCommand = async (
-  command: string,
-  { options, env }: RunCommandOptions = {},
-): Promise<number> => {
+export const runCommand = async (command: string, { options, env }: RunCommandOptions = {}): Promise<number> => {
   const parts = command.split(' ').filter((part) => Boolean(part));
   if (parts.length === 0) throw new Error('Wrong command provided');
 

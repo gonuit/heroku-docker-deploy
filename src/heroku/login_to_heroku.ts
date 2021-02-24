@@ -7,11 +7,7 @@ type HerokuCredentials = {
   cwd: string;
 };
 
-export const loginToHeroku = async ({
-  email,
-  herokuApiKey,
-  cwd,
-}: HerokuCredentials): Promise<boolean> => {
+export const loginToHeroku = async ({ email, herokuApiKey, cwd }: HerokuCredentials): Promise<boolean> => {
   try {
     core.startGroup('Logging into the Heroku docker registry...');
     const data = await exec(

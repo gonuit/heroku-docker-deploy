@@ -13,7 +13,7 @@ export const buildDockerImage = async ({
   cwd: string;
 }): Promise<boolean> => {
   try {
-    core.startGroup(`Building docker container...`);
+    core.startGroup('Building docker container...');
 
     const options = dockerOptions ?? '';
 
