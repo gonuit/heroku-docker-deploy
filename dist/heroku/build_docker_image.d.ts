@@ -1,6 +1,6 @@
-export declare const buildDockerImage: ({ dockerfileName, dockerFilePath, dockerOptions, herokuAppName, }: {
+export declare const buildDockerImage: ({ dockerfileName, dockerOptions, herokuAppName, cwd, }: {
     dockerfileName: string;
-    dockerFilePath: string;
     dockerOptions?: string | undefined;
     herokuAppName: string;
+    cwd: string;
 }) => Promise<boolean>;
