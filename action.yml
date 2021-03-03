@@ -20,6 +20,9 @@ inputs:
   docker_options:
     description: "Additional options of docker build command"
     required: false
+  process_type:
+    description: "Select process type for wich you want docker container to be uploaded. [default=web]"
+    required: false
 branding:
   icon: server
   color: purple
