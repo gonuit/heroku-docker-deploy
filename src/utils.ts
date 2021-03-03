@@ -7,7 +7,7 @@ import assert from 'assert';
 
 export const exec = promisify(ChildProcess.exec);
 
-export const getCwd = (path: string): string => {
+export const getCwdFromPath = (path: string): string => {
   assert(path, 'Path cannot be null or undefined.');
 
   const cwd = process.cwd();
@@ -17,6 +17,11 @@ export const getCwd = (path: string): string => {
 export const assertDirExists = (dirPath: string): void => {
   const directoryExists = fs.existsSync(dirPath);
   assert(directoryExists, `Directory: "${dirPath}" does not exist.`);
+};
+
+export const assertFileExists = (path: string): void => {
+  const directoryExists = fs.existsSync(path);
+  assert(directoryExists, `File: "${path}" does not exist.`);
 };
 
 interface RunCommandOptions {

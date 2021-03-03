@@ -4,9 +4,12 @@ import { buildDockerImage } from './heroku/build_docker_image';
 import { pushDockerContainer } from './heroku/push_docker_container';
 import { releaseDockerContainer } from './heroku/release_docker_container';
 import assert from 'assert';
-import { assertDirExists, getCwd as getCwdFromPath } from './utils';
+import { assertDirExists, assertFileExists, getCwdFromPath } from './utils';
+import path from 'path';
 
 const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
+const DEFAULT_PROCESS_TYPE = 'web';
+const DEFAULT_DOCKER_OPTIONS = '';
 
 (async () => {
   try {
@@ -15,7 +18,8 @@ const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
     const herokuAppName = core.getInput('heroku_app_name', { required: true });
     const dockerFileDirectory = core.getInput('dockerfile_directory', { required: true });
     const dockerfileName = core.getInput('dockerfile_name') ?? DEFAULT_DOCKERFILE_NAME;
-    const dockerOptions = core.getInput('docker_options');
+    const dockerOptions = core.getInput('docker_options') ?? DEFAULT_DOCKER_OPTIONS;
+    const processType = core.getInput('process_type') ?? DEFAULT_PROCESS_TYPE;
 
     assert(email, 'Missing required field: `email`.');
     assert(herokuApiKey, 'Missing required field: `heroku_api_key`.');
@@ -25,6 +29,8 @@ const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
     // Create CWD that will be used by all commands
     const cwd = getCwdFromPath(dockerFileDirectory);
     assertDirExists(cwd);
+    const dockerFilePath = path.join(dockerFileDirectory, dockerfileName);
+    assertFileExists(dockerFilePath);
 
     const logged = await loginToHeroku({
       email,
@@ -38,6 +44,7 @@ const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
       dockerOptions,
       herokuAppName,
       cwd,
+      processType,
     });
     if (!built) return;
 
@@ -45,6 +52,7 @@ const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
       herokuApiKey,
       herokuAppName,
       cwd,
+      processType,
     });
     if (!pushed) return;
 
@@ -52,6 +60,7 @@ const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
       herokuApiKey,
       herokuAppName,
       cwd,
+      processType,
     });
     if (!released) return;
 
