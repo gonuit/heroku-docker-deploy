@@ -17,9 +17,9 @@ const DEFAULT_DOCKER_OPTIONS = '';
     const herokuApiKey = core.getInput('heroku_api_key', { required: true });
     const herokuAppName = core.getInput('heroku_app_name', { required: true });
     const dockerFileDirectory = core.getInput('dockerfile_directory', { required: true });
-    const dockerfileName = core.getInput('dockerfile_name') ?? DEFAULT_DOCKERFILE_NAME;
-    const dockerOptions = core.getInput('docker_options') ?? DEFAULT_DOCKER_OPTIONS;
-    const processType = core.getInput('process_type') ?? DEFAULT_PROCESS_TYPE;
+    const dockerfileName = core.getInput('dockerfile_name') || DEFAULT_DOCKERFILE_NAME;
+    const dockerOptions = core.getInput('docker_options') || DEFAULT_DOCKER_OPTIONS;
+    const processType = core.getInput('process_type') || DEFAULT_PROCESS_TYPE;
 
     assert(email, 'Missing required field: `email`.');
     assert(herokuApiKey, 'Missing required field: `heroku_api_key`.');

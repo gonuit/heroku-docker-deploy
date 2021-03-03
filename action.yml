@@ -14,15 +14,19 @@ inputs:
   dockerfile_directory:
     description: "Dockerfile directory."
     required: true
+    default: "./"
   dockerfile_name:
     description: "Dockerfile name. [default=Dockerfile]"
     required: false
+    default: "Dockerfile"
   docker_options:
     description: "Additional options of docker build command"
     required: false
+    default: ""
   process_type:
     description: "Select process type for wich you want docker container to be uploaded. [default=web]"
     required: false
+    default: "web"
 branding:
   icon: server
   color: purple
