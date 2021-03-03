@@ -5,14 +5,16 @@ export const releaseDockerContainer = async ({
   herokuApiKey,
   herokuAppName,
   cwd,
+  processType,
 }: {
   herokuAppName: string;
   herokuApiKey: string;
   cwd: string;
+  processType: string;
 }): Promise<boolean> => {
   try {
     core.startGroup('Releasing container...');
-    await runCommand(`heroku container:release web --app ${herokuAppName}`, {
+    await runCommand(`heroku container:release ${processType} --app ${herokuAppName}`, {
       env: { HEROKU_API_KEY: herokuApiKey },
       options: { cwd },
     });

@@ -6,19 +6,20 @@ export const buildDockerImage = async ({
   dockerOptions,
   herokuAppName,
   cwd,
+  processType,
 }: {
   dockerfileName: string;
-  dockerOptions?: string | undefined;
+  dockerOptions: string;
   herokuAppName: string;
   cwd: string;
+  processType: string;
 }): Promise<boolean> => {
   try {
     core.startGroup('Building docker container...');
 
-    const options = dockerOptions ?? '';
-
     await runCommand(
-      `docker build --file ${dockerfileName} ${options} --tag registry.heroku.com/${herokuAppName}/web .`,
+      `docker build --file ${dockerfileName} ${dockerOptions} ` +
+        `--tag registry.heroku.com/${herokuAppName}/${processType} .`,
       { options: { cwd } },
     );
     console.log('Docker container built.');
