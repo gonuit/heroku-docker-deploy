@@ -59,6 +59,7 @@ jobs:
           # (Optional, default: "web")
           # Select the process type for which you want the docker container to be uploaded.
           # By default, this argument is set to "web".
+          # Supports multiple process types, ex: "web, release".
           # For more information look at https://devcenter.heroku.com/articles/process-model
           process_type: web
           
