@@ -9,7 +9,7 @@ import path from 'path';
 
 const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
 const DEFAULT_PROCESS_TYPE = 'web';
-const DEFAULT_DOCKER_OPTIONS = '';
+const DEFAULT_DOCKER_OPTIONS = '--no-cache';
 
 (async () => {
   try {
