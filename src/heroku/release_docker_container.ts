@@ -10,7 +10,7 @@ export const releaseDockerContainer = async ({
   herokuAppName: string;
   herokuApiKey: string;
   cwd: string;
-  processTypes: string[];
+  processTypes: Array<string>;
 }): Promise<boolean> => {
   try {
     core.startGroup('Releasing container...');

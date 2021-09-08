@@ -17,12 +17,11 @@ export const buildDockerImage = async ({
   try {
     core.startGroup('Building docker container...');
 
-    const tags = processTypes.map(processType => `--tag registry.heroku.com/${herokuAppName}/${processType}`);
+    const tags = processTypes.map((processType) => `--tag registry.heroku.com/${herokuAppName}/${processType}`);
 
-    await runCommand(
-      `docker build --file ${dockerfileName} ${dockerOptions} ${tags.join(' ')} .`,
-      { options: { cwd } },
-    );
+    await runCommand(`docker build --file ${dockerfileName} ${dockerOptions} ${tags.join(' ')} .`, {
+      options: { cwd },
+    });
     console.log('Docker container built.');
     core.endGroup();
     return true;

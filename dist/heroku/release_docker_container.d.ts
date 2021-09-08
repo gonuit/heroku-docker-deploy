@@ -2,5 +2,5 @@ export declare const releaseDockerContainer: ({ herokuApiKey, herokuAppName, cwd
     herokuAppName: string;
     herokuApiKey: string;
     cwd: string;
-    processTypes: string[];
+    processTypes: Array<string>;
 }) => Promise<boolean>;

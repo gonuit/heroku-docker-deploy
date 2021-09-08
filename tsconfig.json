@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "lib": [
+      "ES2016",
+      "ES2017",
+      "ES2018",
+      "ES2019",
+      "ESNext",
+      "DOM"
+    ],
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,

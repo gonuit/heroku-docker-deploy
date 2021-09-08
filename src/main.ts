@@ -19,7 +19,7 @@ const DEFAULT_DOCKER_OPTIONS = '--no-cache';
     const dockerFileDirectory = core.getInput('dockerfile_directory', { required: true });
     const dockerfileName = core.getInput('dockerfile_name') || DEFAULT_DOCKERFILE_NAME;
     const dockerOptions = core.getInput('docker_options') || DEFAULT_DOCKER_OPTIONS;
-    const processTypes = (core.getInput('process_type') || DEFAULT_PROCESS_TYPE).split(",").map(type => type.trim());
+    const processTypes = (core.getInput('process_type') || DEFAULT_PROCESS_TYPE).split(',').map((type) => type.trim());
 
     assert(email, 'Missing required field: `email`.');
     assert(herokuApiKey, 'Missing required field: `heroku_api_key`.');

@@ -15,7 +15,7 @@ export const pushDockerContainer = async ({
   try {
     core.startGroup('Pushing container to heroku registry...');
 
-    const tags = processTypes.map(processType => `registry.heroku.com/${herokuAppName}/${processType}`);
+    const tags = processTypes.map((processType) => `registry.heroku.com/${herokuAppName}/${processType}`);
 
     for (const tag of tags) {
       await runCommand(`docker push ${tag}`, {
