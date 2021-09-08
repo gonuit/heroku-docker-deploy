@@ -17,9 +17,13 @@ export const loginToHeroku = async ({ email, herokuApiKey, cwd }: HerokuCredenti
     console.log(data.stdout);
     core.endGroup();
     return true;
-  } catch (error) {
+  } catch (err) {
     core.endGroup();
-    core.setFailed(`Logging failed.\nError: ${error.message}`);
+    if (err instanceof Error) {
+      core.setFailed(`Logging failed.\nError: ${err.message}`);
+    } else {
+      core.setFailed(`Logging failed.\nError: ${err}`);
+    }
     return false;
   }
 };

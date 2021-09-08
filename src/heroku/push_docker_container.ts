@@ -23,7 +23,11 @@ export const pushDockerContainer = async ({
     return true;
   } catch (err) {
     core.endGroup();
-    core.setFailed(`Pushing docker container failed.\nError ${err.message}`);
+    if (err instanceof Error) {
+      core.setFailed(`Pushing docker container failed.\nError: ${err.message}`);
+    } else {
+      core.setFailed(`Pushing docker container failed.\nError: ${err}`);
+    }
     return false;
   }
 };

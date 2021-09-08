@@ -66,6 +66,10 @@ const DEFAULT_DOCKER_OPTIONS = '--no-cache';
 
     console.log('Successfully deployed! 💪 🚀');
   } catch (err) {
-    core.setFailed(`Something goes wrong 😧.\nError: ${err.message}`);
+    if (err instanceof Error) {
+      core.setFailed(`Something goes wrong 😧.\nError: ${err.message}`);
+    } else {
+      core.setFailed(`Something goes wrong 😧.\nError: ${err}`);
+    }
   }
 })();
