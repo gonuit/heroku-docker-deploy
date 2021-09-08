@@ -30,6 +30,7 @@ interface RunCommandOptions {
 }
 
 export const runCommand = async (command: string, { options, env }: RunCommandOptions = {}): Promise<number> => {
+  console.log(`$ ${command}`);
   const parts = command.split(' ').filter((part) => Boolean(part));
   if (parts.length === 0) throw new Error('Wrong command provided');
 

@@ -9,7 +9,7 @@ import path from 'path';
 
 const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
 const DEFAULT_PROCESS_TYPE = 'web';
-const DEFAULT_DOCKER_OPTIONS = '';
+const DEFAULT_DOCKER_OPTIONS = '--no-cache';
 
 (async () => {
   try {
@@ -19,7 +19,7 @@ const DEFAULT_DOCKER_OPTIONS = '';
     const dockerFileDirectory = core.getInput('dockerfile_directory', { required: true });
     const dockerfileName = core.getInput('dockerfile_name') || DEFAULT_DOCKERFILE_NAME;
     const dockerOptions = core.getInput('docker_options') || DEFAULT_DOCKER_OPTIONS;
-    const processType = core.getInput('process_type') || DEFAULT_PROCESS_TYPE;
+    const processTypes = (core.getInput('process_type') || DEFAULT_PROCESS_TYPE).split(',').map((type) => type.trim());
 
     assert(email, 'Missing required field: `email`.');
     assert(herokuApiKey, 'Missing required field: `heroku_api_key`.');
@@ -44,7 +44,7 @@ const DEFAULT_DOCKER_OPTIONS = '';
       dockerOptions,
       herokuAppName,
       cwd,
-      processType,
+      processTypes,
     });
     if (!built) return;
 
@@ -52,7 +52,7 @@ const DEFAULT_DOCKER_OPTIONS = '';
       herokuApiKey,
       herokuAppName,
       cwd,
-      processType,
+      processTypes,
     });
     if (!pushed) return;
 
@@ -60,12 +60,16 @@ const DEFAULT_DOCKER_OPTIONS = '';
       herokuApiKey,
       herokuAppName,
       cwd,
-      processType,
+      processTypes,
     });
     if (!released) return;
 
     console.log('Successfully deployed! 💪 🚀');
   } catch (err) {
-    core.setFailed(`Something goes wrong 😧.\nError: ${err.message}`);
+    if (err instanceof Error) {
+      core.setFailed(`Something goes wrong 😧.\nError: ${err.message}`);
+    } else {
+      core.setFailed(`Something goes wrong 😧.\nError: ${err}`);
+    }
   }
 })();

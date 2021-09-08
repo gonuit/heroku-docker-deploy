@@ -27,7 +27,7 @@ jobs:
 ### ⬇ IMPORTANT PART ⬇ ###
 
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
-        uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
+        uses: gonuit/heroku-docker-deploy@v1.4.0 # GitHub action name (leave it as it is).
         with:
           # Below you must provide variables for your Heroku app.
 
@@ -59,6 +59,7 @@ jobs:
           # (Optional, default: "web")
           # Select the process type for which you want the docker container to be uploaded.
           # By default, this argument is set to "web".
+          # Supports multiple process types, ex: "web, release".
           # For more information look at https://devcenter.heroku.com/articles/process-model
           process_type: web
           

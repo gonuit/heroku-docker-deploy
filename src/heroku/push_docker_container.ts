@@ -5,25 +5,34 @@ export const pushDockerContainer = async ({
   herokuApiKey,
   herokuAppName,
   cwd,
-  processType,
+  processTypes,
 }: {
   herokuAppName: string;
   herokuApiKey: string;
-  processType: string;
+  processTypes: string[];
   cwd: string;
 }): Promise<boolean> => {
   try {
     core.startGroup('Pushing container to heroku registry...');
-    await runCommand(`docker push registry.heroku.com/${herokuAppName}/${processType}`, {
-      env: { HEROKU_API_KEY: herokuApiKey },
-      options: { cwd },
-    });
-    console.log('Container pushed.');
+
+    const tags = processTypes.map((processType) => `registry.heroku.com/${herokuAppName}/${processType}`);
+
+    for (const tag of tags) {
+      await runCommand(`docker push ${tag}`, {
+        env: { HEROKU_API_KEY: herokuApiKey },
+        options: { cwd },
+      });
+      console.log(`${tag} container pushed.`);
+    }
     core.endGroup();
     return true;
   } catch (err) {
     core.endGroup();
-    core.setFailed(`Pushing docker container failed.\nError ${err.message}`);
+    if (err instanceof Error) {
+      core.setFailed(`Pushing docker container failed.\nError: ${err.message}`);
+    } else {
+      core.setFailed(`Pushing docker container failed.\nError: ${err}`);
+    }
     return false;
   }
 };

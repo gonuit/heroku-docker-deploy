@@ -6,28 +6,32 @@ export const buildDockerImage = async ({
   dockerOptions,
   herokuAppName,
   cwd,
-  processType,
+  processTypes,
 }: {
   dockerfileName: string;
   dockerOptions: string;
   herokuAppName: string;
   cwd: string;
-  processType: string;
+  processTypes: string[];
 }): Promise<boolean> => {
   try {
     core.startGroup('Building docker container...');
 
-    await runCommand(
-      `docker build --file ${dockerfileName} ${dockerOptions} ` +
-        `--tag registry.heroku.com/${herokuAppName}/${processType} .`,
-      { options: { cwd } },
-    );
+    const tags = processTypes.map((processType) => `--tag registry.heroku.com/${herokuAppName}/${processType}`);
+
+    await runCommand(`docker build --file ${dockerfileName} ${dockerOptions} ${tags.join(' ')} .`, {
+      options: { cwd },
+    });
     console.log('Docker container built.');
     core.endGroup();
     return true;
   } catch (err) {
     core.endGroup();
-    core.setFailed(`Building container failed.\nError: ${err.message}`);
+    if (err instanceof Error) {
+      core.setFailed(`Building container failed.\nError: ${err.message}`);
+    } else {
+      core.setFailed(`Building container failed.\nError: ${err}`);
+    }
     return false;
   }
 };
