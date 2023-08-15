@@ -10,6 +10,7 @@ import path from 'path';
 const DEFAULT_DOCKERFILE_NAME = 'Dockerfile';
 const DEFAULT_PROCESS_TYPE = 'web';
 const DEFAULT_DOCKER_OPTIONS = '';
+const HEROKU_SKIP_RELEASE = false;
 
 (async () => {
   try {
@@ -20,6 +21,7 @@ const DEFAULT_DOCKER_OPTIONS = '';
     const dockerfileName = core.getInput('dockerfile_name') || DEFAULT_DOCKERFILE_NAME;
     const dockerOptions = core.getInput('docker_options') || DEFAULT_DOCKER_OPTIONS;
     const processType = core.getInput('process_type') || DEFAULT_PROCESS_TYPE;
+    const herokuSkipRelease = core.getInput('heroku_skip_release') || HEROKU_SKIP_RELEASE;
 
     assert(email, 'Missing required field: `email`.');
     assert(herokuApiKey, 'Missing required field: `heroku_api_key`.');
@@ -55,6 +57,9 @@ const DEFAULT_DOCKER_OPTIONS = '';
       processType,
     });
     if (!pushed) return;
+
+    console.log('Successfully pushed! 💪');
+    if (herokuSkipRelease) return;
 
     const released = await releaseDockerContainer({
       herokuApiKey,
