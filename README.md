@@ -2,9 +2,6 @@
 
 Build, Push and Release a Docker container to Heroku 🚀.
 
-**Important:**
-Forked from [gonuit/heroku-docker-deploy](https://github.com/gonuit/heroku-docker-deploy), the fork add the possibility to omit the release phase. This will allow users to release the generated image when desired.
-  
 ## Getting started
 
 ### Your GitHub action workflow file might look like this:
@@ -30,7 +27,7 @@ jobs:
 ### ⬇ IMPORTANT PART ⬇ ###
 
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
-        uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
+        uses: gonuit/heroku-docker-deploy@v1.3.4 # GitHub action name (leave it as it is).
         with:
           # Below you must provide variables for your Heroku app.
 
