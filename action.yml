@@ -11,6 +11,10 @@ inputs:
   heroku_api_key:
     description: "Heroku API key associated with provided user's email."
     required: true
+  heroku_skip_release:
+    description: "Determine if Heroku release phase should be skiped."
+    required: false
+    default: false
   dockerfile_directory:
     description: "Dockerfile directory."
     required: true

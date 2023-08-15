@@ -1,7 +1,7 @@
 # Heroku Docker Deploy - GitHub Action
 
 Build, Push and Release a Docker container to Heroku 🚀.
-  
+
 ## Getting started
 
 ### Your GitHub action workflow file might look like this:
@@ -27,7 +27,7 @@ jobs:
 ### ⬇ IMPORTANT PART ⬇ ###
 
       - name: Build, Push and Release a Docker container to Heroku. # Your custom step name
-        uses: gonuit/heroku-docker-deploy@v1.3.3 # GitHub action name (leave it as it is).
+        uses: gonuit/heroku-docker-deploy@v1.3.4 # GitHub action name (leave it as it is).
         with:
           # Below you must provide variables for your Heroku app.
 
@@ -42,6 +42,10 @@ jobs:
           
           # Name of the heroku application to which the build is to be sent.
           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+
+          # (Optional: true | false, default: false)
+          # Determine if Heroku release phase should be skiped
+          heroku_skip_release: false
 
           # (Optional, default: "./")
           # Dockerfile directory.
